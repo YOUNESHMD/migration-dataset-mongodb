@@ -1,0 +1,31 @@
+services:
+ # conteneur mongodb
+  mongodb:
+    #utilisation de l'image de base mongodb
+    image: mongodb/mongodb-community-server:latest
+    # communication sur les port suivant : 
+    ports:
+      - "27017:27017"
+    # Creation d'un espace de stockage
+    volumes:
+      - mongo_data:/data/db
+
+  # Conteneur du script python 
+  migration:
+  #Utilisation du Dockerfile situé dans la racine
+    build: .
+    # dependance avec le conteneur mongodb
+    depends_on:
+      - mongodb
+    #definition des variables d'environnement utilisé dans le script Python
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/
+      CSV_PATH: /data/healthcare_dataset.csv
+    
+    # montée du dossier local vers le conteneur. fichier en lecture seule
+    volumes:
+      - ./data:/data:ro
+    restart: "no"
+
+volumes:
+  mongo_data:
