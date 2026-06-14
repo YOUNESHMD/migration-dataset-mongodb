@@ -3,10 +3,10 @@ import pandas as pd
 from datetime import datetime
 from pymongo import MongoClient
 
+# inport de os afin d'utiliser des variable d'environnement
 import os
 
-# Logging : 
- 
+# Creation de Logging afin de suivre la migration: 
 import logging
 from datetime import datetime
 
@@ -58,7 +58,7 @@ class Migration :
             print (e)
 
 # Extraction:
-    def extraction(self,path : str) -> pd.DataFrame:
+    def extraction(self,path) -> pd.DataFrame:
 
         """Lire le fichier CSV et retourner un DataFrame."""
         logging.info(" Debut d'extraction du fichier CSV")
@@ -159,16 +159,18 @@ class Migration :
 def main():
     # utilisation du local host
     uri_mongodb = os.getenv( "MONGO_URI", "mongodb://localhost:27017/" )
+    chemin_csv = os.getenv("CSV_PATH","healthcare_dataset.csv")
 
     mig = Migration( uri_mongodb = uri_mongodb, nom_base="healthcare_db", nom_collection="patients" )
     try:
         mig.connexion()
-        dataset = mig.extraction("healthcare_dataset.csv")
+        dataset = mig.extraction(chemin_csv )
         documents = mig.traitement(dataset)
         mig.chargement(documents)
 
         print("\nMigration terminée avec succès.")
     finally:
+          #fermeture de la connexion avec Mongodb
           mig.fermer_connexion()
 
 
