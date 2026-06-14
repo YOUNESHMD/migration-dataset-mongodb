@@ -11,3 +11,4 @@ wheels/
 
 # dataset 
 healthcare_dataset.csv
+data/*.csv
