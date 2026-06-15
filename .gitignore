@@ -9,6 +9,8 @@ wheels/
 # Virtual environments
 .venv
 
+# variables d'environement
+.env
 # dataset 
 healthcare_dataset.csv
 data/*.csv

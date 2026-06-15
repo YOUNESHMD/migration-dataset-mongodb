@@ -6,9 +6,19 @@ services:
     # communication sur les port suivant : 
     ports:
       - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_MIGRATION_USER: ${MONGO_MIGRATION_USER}
+      MONGO_MIGRATION_PASSWORD: ${MONGO_MIGRATION_PASSWORD}
+      MONGO_READER_USER: ${MONGO_READER_USER}
+      MONGO_READER_PASSWORD: ${MONGO_READER_PASSWORD}
     # Creation d'un espace de stockage
     volumes:
+    #Les données internes de MongoDB seront conservées dans le volume mongo_data
       - mongo_data:/data/db
+    #scripts d’initialisation MongoDB, exécute automatiquement le script pour créer les utilisateurs présents dans ce dossier
+      - ./init-mongo:/docker-entrypoint-initdb.d:ro
 
   # Conteneur du script python 
   migration:
@@ -19,13 +29,13 @@ services:
       - mongodb
     #definition des variables d'environnement utilisé dans le script Python
     environment:
-      MONGO_URI: mongodb://mongodb:27017/
+      MONGO_URI: mongodb://${MONGO_MIGRATION_USER}:${MONGO_MIGRATION_PASSWORD}@mongodb:27017/healthcare_db?authSource=healthcare_db
       CSV_PATH: /data/healthcare_dataset.csv
     
     # montée du dossier local vers le conteneur. fichier en lecture seule
     volumes:
       - ./data:/data:ro
-    restart: "no"
+    restart: on-failure
 
 volumes:
   mongo_data:

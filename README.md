@@ -4,28 +4,100 @@
 
 Ce projet consiste à migrer les données d'un fichier CSV vers une base de données MongoDB.
 
-L'objectif est de vérifier la qualité des données avant et après la migration, puis d'automatiser l'importation à l'aide d'un script Python.
+Dans un premier temps j'ai realisé un prototype avec un notebook objectif est de vérifier la qualité des données avant et après la migration tester la connexion avec la base de données Mongodb, puis d'automatiser l'importation à l'aide d'un script Python.
+
+la solution utilise Docker Compose afin de lancer automatiquement:
+- un conteneur MongoDB.
+- un conteneur Python qui execute le scripte de migration.
+- un volume pour stocker les données de MongoDB.
+- un volume pour rendre le CSV accessible au script de migration.
+
 
 ## Fonctionnalités
 
 - Lecture du fichier CSV avec pandas
 - Analyse de la qualité des données
 - Détection des valeurs manquantes
-- Détection des doublons
+- Détection et suppression des doublons
 - Vérification des types de données
 - Connexion à MongoDB
 - Création d'une base et d'une collection
-- Importation des données
+- Importation des données dasn MongoDB
 - Vérification de l'intégrité après migration
-- Exemples d'opérations CRUD
+- Vérification du nombre de documents après migration
+- Journalisation des étapes dans un fichier Loggs_migration.log
+
+## Architecture du projet
+
+![alt text](image-3.png)
+
 
 ## Prérequis
 
-- Python 3.11
 - MongoDB installé en local et sera exécuté avec Docker
-- MongoDB Compass
+- Docker Desktop
+- Docker Compose
+- MongoDB Compass, pour verifier les données chargées
+- Git
 
-## Installation
+Python n'a pas besoin d'être installé localement pour exécuter la migration avec Docker, car le script est lancé dans un conteneur Python.
 
-Création d'un environnement virtuel.
+## Description des conteneurs
 
+Le conteneur MongoDB stocke les données migrées depuis le fichier CSV.
+un volume Docker est utiliser afin de conserver les données
+
+Conteneur de migration Python
+le conteneur Phyton execute le scripte main.py
+
+Le script réalise les étapes suivantes :
+
+- connexion à MongoDB ;
+- lecture du fichier CSV ;
+- contrôle des données ;
+- nettoyage des doublons ;
+- conversion des types ;
+- transformation du DataFrame en documents MongoDB ;
+- insertion des documents dans la collection ;
+- vérification du nombre final de documents.
+
+## Volumes utilisés
+
+mongo_data :  conservation des données de la la base de données MongoDB
+
+./data:/data:ro  Accées au fichier CSV depuis le conteneur Python, le dossier data/ contient le fichier CSV utilisé pour la migration
+
+## Roles Utilisateurs 
+Creation d'un fichier init-utilisateurs.js permettant de créer des roles.
+
+admin_user      : administration avec tout les droits
+migration_user  : migration des données avec les droits d'ecriture et de lécture
+reader_user     : avec un role d'ecriture simple
+
+## variables environnements
+
+Integration d'un fichier exemple de variable environnement permettant d'avoir une idée sur la structure du fichier .env à avoir 
+
+## Lancement du projet avec Docker Compose
+
+- Dans un premier temps on place le fichier CSV dans le dossier data/ avec le nom :
+    data/healthcare_dataset.csv
+
+- Puis on lance la migration avec la commande suivante :
+    docker compose up --build
+
+## Vérification du bon fonctionnement
+
+Après l'exécution, le terminal doit afficher un bilan similaire :
+
+Connexion à MongoDB réussie.
+
+--- Contrôle avant nettoyage ---
+Nombre de lignes : 55500
+Nombre de doublons : 534
+
+--- Contrôle après nettoyage ---
+Nombre de lignes : 54966
+Nombre de doublons supprimés : 534
+
+Migration terminée avec succès.
