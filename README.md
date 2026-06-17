@@ -42,6 +42,35 @@ la solution utilise Docker Compose afin de lancer automatiquement:
 
 Python n'a pas besoin d'être installé localement pour exécuter la migration avec Docker, car le script est lancé dans un conteneur Python.
 
+## Schéma de la base de données
+
+La base MongoDB utilisée dans ce projet est "healthcare_db".
+
+Elle contient une collection principale appelée "patients".
+
+Chaque document de la collection représente une admission médicale issue du fichier CSV.
+
+
+healthcare_db                           Type
+└──> patients
+    ├──> _id                           <Object>
+    ├──> Name                          <Object>
+    ├──> Age                            <Int>
+    ├──> Gender                        <Object>
+    ├──> Blood Type                    <Object>
+    ├──> Medical Condition             <Object>
+    ├──> Date of Admission              <Date>
+    ├──> Doctor                        <Object>
+    ├──> Hospital                      <Object>
+    ├──> Insurance Provider            <Object>
+    ├──> Billing Amount                <float>
+    ├──> Room Number                    <Int>
+    ├──> Admission Type                <Object>
+    ├──> Discharge Date                 <Date>
+    ├──> Medication                    <Object>
+    └──> Test Results                  <Object>
+
+
 ## Description des conteneurs
 
 Le conteneur MongoDB stocke les données migrées depuis le fichier CSV.
