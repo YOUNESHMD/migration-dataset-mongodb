@@ -13,6 +13,9 @@ services:
       MONGO_MIGRATION_PASSWORD: ${MONGO_MIGRATION_PASSWORD}
       MONGO_READER_USER: ${MONGO_READER_USER}
       MONGO_READER_PASSWORD: ${MONGO_READER_PASSWORD}
+      
+    networks:
+      - db_mig_network
     # Creation d'un espace de stockage
     volumes:
     #Les données internes de MongoDB seront conservées dans le volume mongo_data
@@ -35,7 +38,12 @@ services:
     # montée du dossier local vers le conteneur. fichier en lecture seule
     volumes:
       - ./data:/data:ro
+    networks:
+      - db_mig_network
     restart: on-failure
 
 volumes:
   mongo_data:
+
+networks:
+  db_mig_network:
