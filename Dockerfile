@@ -11,7 +11,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 #copie du script de migration
-COPY main.py .
+COPY migration_csv.py .
 
-# Lancement du script main.py au lancement du conteneur
-CMD ["python", "main.py"]
+# Lancement du script de migration au démarrage du conteneur
+CMD ["python", "migration_csv.py"]
