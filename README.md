@@ -77,7 +77,7 @@ Le conteneur MongoDB stocke les données migrées depuis le fichier CSV.
 un volume Docker est utiliser afin de conserver les données
 
 Conteneur de migration Python
-le conteneur Phyton execute le scripte main.py
+Le conteneur Python exécute le script migration_csv.py.
 
 Le script réalise les étapes suivantes :
 
