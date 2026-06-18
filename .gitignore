@@ -14,3 +14,10 @@ wheels/
 # dataset 
 healthcare_dataset.csv
 data/*.csv
+
+# Fichiers de journalisation
+*.log
+
+# Fichiers liés à uv non utilisés dans ce projet
+pyproject.toml
+uv.lock
