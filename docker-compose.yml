@@ -13,7 +13,7 @@ services:
       MONGO_MIGRATION_PASSWORD: ${MONGO_MIGRATION_PASSWORD}
       MONGO_READER_USER: ${MONGO_READER_USER}
       MONGO_READER_PASSWORD: ${MONGO_READER_PASSWORD}
-      
+
     networks:
       - db_mig_network
     # Creation d'un espace de stockage
@@ -26,7 +26,8 @@ services:
   # Conteneur du script python 
   migration:
   #Utilisation du Dockerfile situé dans la racine
-    build: .
+    #build: .
+    image: hmdyounes/migration-csv:1.0
     # dependance avec le conteneur mongodb
     depends_on:
       - mongodb

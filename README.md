@@ -29,8 +29,33 @@ la solution utilise Docker Compose afin de lancer automatiquement:
 
 ## Architecture du projet
 
-![alt text](image-3.png)
 
+Structure du dépôt GitHub : 
+
+mongodb-data-migration-python/
+│
+├──> data/     (CSV à placer ici)
+│   └──> .gitkeep 
+│
+├──> init-mongo/
+│   └──> init-utilisateur.js
+│
+├──> migration_csv.py
+├──> Dockerfile
+├──> docker-compose.yml
+├──> requirements.txt
+├──> .env.example
+├──> .gitignore
+└──> README.md
+
+Image créée sur Docker hub : 
+
+Docker Hub
+  └──> image contenant :
+      ├──> Python
+      ├──> pandas
+      ├──> pymongo
+      └──> migration_csv.py    
 
 ## Prérequis
 
@@ -112,8 +137,8 @@ Integration d'un fichier exemple de variable environnement permettant d'avoir un
 - Dans un premier temps on place le fichier CSV dans le dossier data/ avec le nom :
     data/healthcare_dataset.csv
 
-- Puis on lance la migration avec la commande suivante :
-    docker compose up --build
+- Puis on lance la migration avec la commande suivante (Cela demande à Compose de vérifier et récupérer l’image avant de lancer les conteneurs.):
+    docker compose up --pull always
 
 ## Vérification du bon fonctionnement
 
